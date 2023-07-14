@@ -1,51 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
-const Tasklist = ({ list, setList }) => {
-  localStorage.setItem("tareas", JSON.stringify(list));
- 
+const Tasklist = (props) => {
+
+  const { list, eliminarTareas, seleccionarTarea, actualizarTareas, onCambiarEstado } = props;
+
   const [selectedItemId, setSelectedItemId] = useState(null);
-
-
-  const onChangeStatus = (e) => {
-    const name = Number(e.target.name);
-    const check = e.target.checked;
-    const updateList = list.map((item) => ({
-      ...item,
-      done: item.id === name ? check : item.done,
-    }));
-    setList(updateList);
-  };
-
-  const onHandleDelete = (e) => {
-    const tasklist = list.filter((item) => item.id !== e);
-    setList(tasklist);
-  };
-
-  const taskUpdateSelect = (e, datos) => {
-    const task = list.map((item) => ({
-      ...item,
-      editable: item.id === e ? true : item.editable,
-    }));
-    setList(task);
-    setSelectedItemId(datos);
-  };
-
-  const handleUpdate = (e, datos) => {
-    const task2 = list.map((item) => ({
-      ...item,
-      description: item.id === e ? datos : item.description,
-      editable: false,
-    }));
-    setList(task2);
-  };
 
   const handleInputChange = (event) => {
     setSelectedItemId(event.target.value);
-    console.log(event.target.value);
+  };
+
+  const handleClickSelect = (id, description) => {
+    seleccionarTarea(id);
+    setSelectedItemId(description);
   };
 
   return (
-    <div className="tasks">
+    <div className="tasks2">
       {list.length
         ? list.map((item) => (
             <div className="task" key={item.id}>
@@ -54,7 +25,7 @@ const Tasklist = ({ list, setList }) => {
                 name={item.id}
                 type="checkbox"
                 defaultChecked={item.done}
-                onChange={onChangeStatus}
+                onChange={(event)=>onCambiarEstado(item.id, event.target.checked)}
                 id="miCheckbox"
                 key={item.id}
               />
@@ -63,13 +34,13 @@ const Tasklist = ({ list, setList }) => {
                   <input
                     type="text"
                     id={item.id}
-                    value={selectedItemId}
+                    defaultValue={selectedItemId}
                     onChange={handleInputChange}
                   />
                   <img
                     src="./../src/images/ok.png"
                     alt="actualizar tareas"
-                    onClick={() => handleUpdate(item.id, selectedItemId)}
+                    onClick={() => actualizarTareas(item.id, selectedItemId)}
                   />
                 </>
               ) : (
@@ -80,14 +51,14 @@ const Tasklist = ({ list, setList }) => {
                   <img
                     src="./../src/images/update.png"
                     alt="actualizar tareas"
-                    onClick={() => taskUpdateSelect(item.id, item.description)}
+                    onClick={() => handleClickSelect(item.id, item.description)}
                   />
                 </>
               )}
               <img
                 src="./../src/images/delete.png"
                 alt="Eliminar tareas"
-                onClick={() => onHandleDelete(item.id)}
+                onClick={() => eliminarTareas(item.id)}
               />
             </div>
           ))

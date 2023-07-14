@@ -1,36 +1,17 @@
-import React, { useEffect, useState } from "react";
-import Tasklist from "./Tasklist";
+import React, { useState } from "react";
 
-const Task = () => {
-  const local = JSON.parse(localStorage.getItem("tareas"));
-  const [list, setList] = useState(local || []);
+const Task = ({agregarTareas}) => {
+ 
   const [description, setDescription] = useState("");
-  useEffect(() => {
-     if(local !== null){
-        setList(local);
-        }
-        else{localStorage.setItem("tareas", JSON.stringify(list));
-    }
-  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setList([
-      ...list,
-      {
-        id: Math.floor(Math.random() * 10 ** 3),
-        description,
-        done: false,
-        editable: false,
-      },
-    ]);
-    localStorage.setItem("tareas", JSON.stringify(list));
-    console.log("task", list);
+    agregarTareas(description);
     setDescription("");
   };
 
   return (
-    <div className="tasks">
+    <div className="tasks1">
       <form onSubmit={handleSubmit}>
         <div>
           <div className="newtask">
@@ -38,13 +19,12 @@ const Task = () => {
               type="text"
               className="text"
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e)=>setDescription(e.target.value)}
             />
             <button disabled={description ? "" : "disabled"}>Add</button>
           </div>
         </div>
       </form>
-      <Tasklist list={list} setList={setList} />
     </div>
   );
 };
