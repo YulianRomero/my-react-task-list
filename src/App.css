@@ -69,3 +69,13 @@ input[type="checkbox"]:checked + label {
 .task span{
    font-weight: 400;
 }
+.error {
+   display: block;
+   color: red;
+   font-style: italic;
+   font-size: 0.7rem;
+   margin-top: 0.1rem;
+ }
+ button:disabled {
+   background-color: #b9e5cd;
+ }
